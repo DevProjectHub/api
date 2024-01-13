@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model User {
+  id               String   @id @default(uuid())
+  email            String   @unique
+  password         String
+  isEmailConfirmed Boolean?
+  profile          Profile?
+}
+
+model Profile {
+  id              String            @id @default(uuid())
+  name            String
+  lastName        String
+  photo           String?
+  description     String?
+  linkedin        String?
+  github          String?
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String            @unique
+  projectsId      String?
+  projectProfile  ProjectProfile[]
+  Projects        Project[]
+  JobSubscription JobSubscription[]
+}
+
+model ProjectProfile {
+  id          String   @id @default(uuid())
+  role        String
+  description String?
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   String
+  profile     Profile? @relation(fields: [profileId], references: [id])
+  profileId   String?
+
+  @@unique([projectId, profileId])
+}
+
+model JobVacancy {
+  id              String            @id @default(uuid())
+  description     String
+  role            String
+  projects        Project?          @relation(fields: [projectsId], references: [id])
+  projectsId      String?
+  JobSubscription JobSubscription[]
+}
+
+model JobSubscription {
+  id           String      @id @default(uuid())
+  profile      Profile?    @relation(fields: [profileId], references: [id])
+  profileId    String?
+  jobOpening   JobVacancy? @relation(fields: [jobOpeningId], references: [id])
+  jobOpeningId String?
+}
+
+model Project {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String
+  logo        String?
+  founder     Profile?         @relation(fields: [founderId], references: [id])
+  founderId   String?
+  members     ProjectProfile[]
+  jobOpening  JobVacancy[]
+}
