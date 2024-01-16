@@ -1,3 +1,5 @@
-import { ICreateProject } from './create-project.interface';
-
-export interface IUpdateProject extends Partial<ICreateProject> {}
+export interface IPatchProject {
+  name?: string;
+  description?: string;
+  logo?: string;
+}

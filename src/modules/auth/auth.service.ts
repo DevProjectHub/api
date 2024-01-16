@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../users/user.service';
-import { ProfileService } from '../profiles/profile.service';
 import { PrismaService } from 'prisma/prisma.service';
 import { ISignup } from './interface/signup.interface';
 import { ILogin } from './interface/login.interface';
@@ -8,18 +6,21 @@ import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 import { HashUtil } from 'src/utils/hash.util';
 import { JwtStrategies } from './jwt.strategies';
 import { JwtAuthPayload } from './interface/jwt-auth-payload.interface';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserProvider } from '../users/provider/create-user.provider';
+import { GetUserByEmailProvider } from '../users/provider/get-user-by-email.provider';
+import { CreateProfileProvider } from '../profiles/provider/create-profile.provider';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
-    private userService: UserService,
-    private profileService: ProfileService,
     private jwtStrategies: JwtStrategies,
+    private getUserByEmailProvider: GetUserByEmailProvider,
+    private createUserProvider: CreateUserProvider,
+    private createProfileProvider: CreateProfileProvider,
   ) {}
   async login(data: ILogin) {
-    const user = await this.userService.getUserByEmail(data.email);
+    const user = await this.getUserByEmailProvider.perform(data.email);
 
     if (!user) throw AuthBusinessExceptions.invalidCredentialsException();
 
@@ -34,7 +35,7 @@ export class AuthService {
 
     const payload: JwtAuthPayload = {
       userId: user.id,
-      email: user.email,
+      profileId: user.profile.id,
       isEmailConfirmed: user.isEmailConfirmed,
     };
 
@@ -48,16 +49,21 @@ export class AuthService {
     //   email: data.email,
     // });
 
-    const user = await this.prismaService.$transaction(async () => {
-      const user = await this.userService.createUser({
-        email: data.user.email,
-        password,
-      });
+    const { user, profile } = await this.prismaService.$transaction(
+      async () => {
+        const user = await this.createUserProvider.perform({
+          email: data.user.email,
+          password,
+        });
 
-      await this.profileService.createProfile(user.id, data.profile);
+        const profile = await this.createProfileProvider.perform(
+          user.id,
+          data.profile,
+        );
 
-      return user;
-    });
+        return { user, profile };
+      },
+    );
 
     // await this.mailService.sendConfirmationEmail(
     //   createdUser.email,
@@ -65,11 +71,9 @@ export class AuthService {
     //   accessToken,
     // );
 
-    //jwt
-
     const payload: JwtAuthPayload = {
       userId: user.id,
-      email: user.email,
+      profileId: profile.id,
       isEmailConfirmed: user.isEmailConfirmed,
     };
 

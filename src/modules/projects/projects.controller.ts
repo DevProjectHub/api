@@ -1,33 +1,63 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
   Post,
-  Put,
+  Query,
   Req,
 } from '@nestjs/common';
-import { ProjectsService } from './projects.service';
-import { ICreateProject } from './interface/create-project.interface';
-import { IUpdateProject } from './interface/update-project.interface';
 import { SignedRequest } from '../auth/interface/signed-request.interface';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { AddMemberDto } from './dto/add-member.dto';
+import { Public } from 'src/shared/constants/public.constant';
+import { PatchProjectDto } from './dto/update-project.dto';
+import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { PaginationPipe } from 'src/shared/pipe/pagination.pipe';
+import { FilterPipe } from 'src/shared/pipe/filter.pipe';
+import { FilterDto } from 'src/shared/dto/filter.dto';
+import { CreateProjectProvider } from './provider/create-project.provider';
+import { GetMyProjectsProvider } from './provider/get-my-projects.provider';
+import { GetProjectProvider } from './provider/get-project.provider';
+import { GetProjectsResumeProvider } from './provider/get-resume-projects.provider';
+import { PatchProjectProvider } from './provider/patch-project.provider';
+import { SearchProjectProvider } from './provider/search-project.provider';
+import { DismissProjectProvider } from './provider/dismiss-project.provider';
 
 @Controller('projects')
 export class ProjectsController {
-  constructor(private projectsService: ProjectsService) {}
+  constructor(
+    private createProjectProvider: CreateProjectProvider,
+    private getMyProjectsProvider: GetMyProjectsProvider,
+    private getProjectProvider: GetProjectProvider,
+    private getProjectsResumeProvider: GetProjectsResumeProvider,
+    private searchProjectProvider: SearchProjectProvider,
+    private patchProjectProvider: PatchProjectProvider,
+    private dismissProjectProvider: DismissProjectProvider,
+  ) {}
 
-  @Get(':id')
-  async getProject(@Param('id') id: string) {
-    return await this.projectsService.getProject(id);
+  @Get('projectId/:projectId')
+  async getProject(@Param('projectId') projectId: string) {
+    return await this.getProjectProvider.perform(projectId);
   }
 
-  @Get()
-  async getProjects() {
-    return await this.projectsService.getProjects();
+  @Public()
+  @Get('resume')
+  async getProjectsResume() {
+    return await this.getProjectsResumeProvider.perform();
+  }
+
+  @Get('my')
+  async getMyProjects(@Req() req: SignedRequest) {
+    return await this.getMyProjectsProvider.perform(req.user.userId);
+  }
+
+  @Get('search')
+  async searchProject(
+    @Query(PaginationPipe) pagination: PaginationDto,
+    @Query(FilterPipe) filter: FilterDto,
+  ) {
+    return await this.searchProjectProvider.searchProject(pagination, filter);
   }
 
   @Post()
@@ -35,21 +65,25 @@ export class ProjectsController {
     @Body() data: CreateProjectDto,
     @Req() req: SignedRequest,
   ) {
-    return await this.projectsService.createProject(data, req.user.userId);
+    return await this.createProjectProvider.perform(data, req.user.profileId);
   }
 
-  @Patch(':id/add-member')
-  async addMember(@Param('id') id: string, @Body() data: AddMemberDto) {
-    return await this.projectsService.addMember(id, data);
+  @Patch('projectId/:projectId')
+  async patchProject(
+    @Param('projectId') projectId: string,
+    @Body() data: PatchProjectDto,
+  ) {
+    return await this.patchProjectProvider.perform(projectId, data);
   }
 
-  @Put(':id')
-  async updateProject(@Param('id') id: string, @Body() data: IUpdateProject) {
-    return await this.projectsService.updateProject(id, data);
-  }
-
-  @Delete(':id')
-  async deleteProject(@Param('id') id: string) {
-    return await this.projectsService.deleteProject(id);
+  @Patch('dismiss/:projectId')
+  async dismissProject(
+    @Param('projectId') projectId: string,
+    @Req() req: SignedRequest,
+  ) {
+    return await this.dismissProjectProvider.perform(
+      projectId,
+      req.user.profileId,
+    );
   }
 }

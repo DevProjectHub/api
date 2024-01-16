@@ -1,5 +1,5 @@
 export interface JwtAuthPayload {
   userId: string;
-  email: string;
+  profileId: string;
   isEmailConfirmed: boolean;
 }

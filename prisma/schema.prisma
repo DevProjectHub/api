@@ -14,62 +14,91 @@ model User {
   id               String   @id @default(uuid())
   email            String   @unique
   password         String
-  isEmailConfirmed Boolean?
+  isEmailConfirmed Boolean  @default(false)
   profile          Profile?
 }
 
 model Profile {
-  id              String            @id @default(uuid())
-  name            String
-  lastName        String
-  photo           String?
-  description     String?
-  linkedin        String?
-  github          String?
-  user            User              @relation(fields: [userId], references: [id])
-  userId          String            @unique
-  projectsId      String?
-  projectProfile  ProjectProfile[]
-  Projects        Project[]
-  JobSubscription JobSubscription[]
+  id               String            @id @default(uuid())
+  name             String
+  lastName         String
+  photo            String?
+  description      String?
+  linkedin         String?
+  github           String?
+  discord          String?
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String            @unique
+  projectsId       String?
+  projectProfiles  ProjectProfile[]
+  projects         Project[]
+  jobSubscriptions JobSubscription[]
 }
 
 model ProjectProfile {
   id          String   @id @default(uuid())
   role        String
   description String?
-  project     Project  @relation(fields: [projectId], references: [id])
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
-  profile     Profile? @relation(fields: [profileId], references: [id])
+  profile     Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId   String?
 
-  @@unique([projectId, profileId])
+  @@index([projectId, profileId])
 }
 
 model JobVacancy {
-  id              String            @id @default(uuid())
-  description     String
-  role            String
-  projects        Project?          @relation(fields: [projectsId], references: [id])
-  projectsId      String?
-  JobSubscription JobSubscription[]
+  id               String            @id @default(uuid())
+  description      String
+  role             String
+  project          Project?          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId        String?
+  jobSubscriptions JobSubscription[]
+  requirements     Requirement[]
+}
+
+model Requirement {
+  id                 String              @id @default(uuid())
+  require            String
+  jobVacancy         JobVacancy          @relation(fields: [jobVacancyId], references: [id], onDelete: Cascade)
+  jobVacancyId       String
+  RequirementAnswers RequirementAnswer[]
 }
 
 model JobSubscription {
-  id           String      @id @default(uuid())
-  profile      Profile?    @relation(fields: [profileId], references: [id])
-  profileId    String?
-  jobOpening   JobVacancy? @relation(fields: [jobOpeningId], references: [id])
-  jobOpeningId String?
+  id                 String              @id @default(uuid())
+  requirementAnswers RequirementAnswer[]
+  profile            Profile?            @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId          String?
+  jobVacancy         JobVacancy?         @relation(fields: [jobVacancyId], references: [id], onDelete: Cascade)
+  jobVacancyId       String?
+}
+
+model RequirementAnswer {
+  id                String                @id @default(uuid())
+  answer            RequirementAnswerEnum
+  jobSubscription   JobSubscription       @relation(fields: [jobSubscriptionId], references: [id], onDelete: Cascade)
+  jobSubscriptionId String
+  requirements      Requirement           @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+  requirementId     String
+
+  @@index([jobSubscriptionId, requirementId])
 }
 
 model Project {
-  id          String           @id @default(uuid())
-  name        String           @unique
-  description String
-  logo        String?
-  founder     Profile?         @relation(fields: [founderId], references: [id])
-  founderId   String?
-  members     ProjectProfile[]
-  jobOpening  JobVacancy[]
+  id           String           @id @default(uuid())
+  name         String           @unique
+  description  String
+  logo         String?
+  owner        Profile?         @relation(fields: [ownerId], references: [id])
+  ownerId      String?
+  members      ProjectProfile[]
+  jobVacancies JobVacancy[]
+  updatedAt    DateTime         @updatedAt
+}
+
+enum RequirementAnswerEnum {
+  INTERESSE
+  CONHECO
+  EXPERT
 }

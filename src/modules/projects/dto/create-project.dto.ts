@@ -12,7 +12,7 @@ export class CreateProjectDto implements ICreateProject {
 
   @IsNotEmpty()
   @IsString()
-  founderRole: string;
+  ownerRole: string;
 
   @IsOptional()
   @IsString()
