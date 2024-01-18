@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Query } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { Public } from 'src/shared/constants/public.constant';
+import { Public } from 'src/shared/decorators/public.decorator';
 import { LoginProvider } from './provider/login.provider';
 import { SignupProvider } from './provider/signup.provider';
 import { ForgetPasswordProvider } from './provider/forget-password.provider';

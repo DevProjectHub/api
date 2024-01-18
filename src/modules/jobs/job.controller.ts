@@ -14,7 +14,7 @@ export class JobController {
   constructor(
     private newJobVacancyProvider: NewJobVacancyProvider,
     private getSubscriptionsProvider: GetSubscriptionsProvider,
-    // private getSpecificSubscriptionProvider: GetSpecificSubscriptionProvider,
+    private getSpecificSubscriptionProvider: GetSpecificSubscriptionProvider,
     private acceptCandidateProvider: AcceptCandidateProvider,
     private refuseCandidateProvider: RefuseCandidateProvider,
     private subscribeJobProvider: SubscribeJobProvider,
@@ -25,14 +25,14 @@ export class JobController {
     return await this.getSubscriptionsProvider.perform(projectId);
   }
 
-  // @Get('subscriptions/:jobSubscriptionId')
-  // async getSpecificSubscription(
-  //   @Param('jobSubscriptionId') jobSubscriptionId: string,
-  // ) {
-  //   return await this.getSpecificSubscriptionProvider.perform(
-  //     jobSubscriptionId,
-  //   );
-  // }
+  @Get('subscriptions/:jobSubscriptionId')
+  async getSpecificSubscription(
+    @Param('jobSubscriptionId') jobSubscriptionId: string,
+  ) {
+    return await this.getSpecificSubscriptionProvider.perform(
+      jobSubscriptionId,
+    );
+  }
 
   @Post('new')
   async newVacancy(@Body() data: NewJobVacancyDto) {

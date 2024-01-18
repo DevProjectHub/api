@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { SignedRequest } from '../auth/interface/signed-request.interface';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { Public } from 'src/shared/constants/public.constant';
+import { Public } from 'src/shared/decorators/public.decorator';
 import { PatchProjectDto } from './dto/update-project.dto';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { PaginationPipe } from 'src/shared/pipe/pagination.pipe';
@@ -23,6 +23,7 @@ import { GetProjectsResumeProvider } from './provider/get-resume-projects.provid
 import { PatchProjectProvider } from './provider/patch-project.provider';
 import { SearchProjectProvider } from './provider/search-project.provider';
 import { DismissProjectProvider } from './provider/dismiss-project.provider';
+import { IPagination } from 'src/shared/interface/pagination.interface';
 
 @Controller('projects')
 export class ProjectsController {

@@ -16,9 +16,15 @@ export class NullableTransformInterceptor<T>
   implements NestInterceptor<T, Response<T>>
 {
   intercept(
-    _context: ExecutionContext,
+    context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
-    return next.handle().pipe(map((data) => data ?? {}));
+    return next.handle().pipe(
+      map((data) => {
+        if (!typeof data) context.switchToHttp().getResponse().status(204);
+
+        return data;
+      }),
+    );
   }
 }

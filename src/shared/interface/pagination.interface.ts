@@ -6,5 +6,5 @@ export interface IPagination {
   limit: number;
   order: Order;
   field: Field;
-  skip?: number;
+  skip: number;
 }

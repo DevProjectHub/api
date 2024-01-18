@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { IS_PUBLIC_KEY } from 'src/shared/constants/public.constant';
+import { IS_PUBLIC_KEY } from 'src/shared/decorators/public.decorator';
 import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 import { JwtStrategies } from './jwt.strategies';
 import { JwtAuthPayload } from './interface/jwt-auth-payload.interface';
