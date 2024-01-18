@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { ICreateProfile } from '../interface/create-profile.interface';
+import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 
 @Injectable()
 export class CreateProfileProvider {
@@ -17,7 +18,7 @@ export class CreateProfileProvider {
       where: { id: userId },
     });
 
-    if (!user) throw new Error('User not found');
+    if (!user) throw AuthBusinessExceptions.userNotFoundException();
   }
 
   private async createProfile(

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { JobBusinessExceptions } from 'src/shared/exceptions/job.exceptions';
 
 interface IPreValidation {
   profileId: string;
@@ -24,7 +25,8 @@ export class AcceptCandidateProvider {
       },
     });
 
-    if (!jobSubscription) throw new Error('Job subscription not found');
+    if (!jobSubscription)
+      throw JobBusinessExceptions.jobSubscriptionNotFoundException();
 
     return jobSubscription;
   }

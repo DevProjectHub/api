@@ -1,6 +1,7 @@
 import { PrismaService } from 'prisma/prisma.service';
 import { IGetSubscriptionsPerformResult } from '../interface/get-subscriptions.interface';
 import { Injectable } from '@nestjs/common';
+import { ProjectBusinessExceptions } from 'src/shared/exceptions/project.exception';
 
 @Injectable()
 export class GetSubscriptionsProvider {
@@ -18,7 +19,7 @@ export class GetSubscriptionsProvider {
       select: { id: true },
     });
 
-    if (!project) throw new Error('Project not found');
+    if (!project) throw ProjectBusinessExceptions.projectNotFoundException();
   }
 
   private async subscriptions(

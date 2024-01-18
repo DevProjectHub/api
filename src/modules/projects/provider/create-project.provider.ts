@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { ICreateProject } from '../interface/create-project.interface';
 import { Project } from '@prisma/client';
+import { ProjectBusinessExceptions } from 'src/shared/exceptions/project.exception';
 
 @Injectable()
 export class CreateProjectProvider {
@@ -39,6 +40,7 @@ export class CreateProjectProvider {
       where: { name },
     });
 
-    if (project) throw new Error('Já existe um projeto com esse nome');
+    if (project)
+      throw ProjectBusinessExceptions.projectAlreadyRegisteredException();
   }
 }

@@ -1,7 +1,7 @@
 import { GetSpecificSubscriptionPerformResult } from '../interface/get-specific-subscription.provider';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-
+import { JobBusinessExceptions } from 'src/shared/exceptions/job.exceptions';
 @Injectable()
 export class GetSpecificSubscriptionProvider {
   constructor(private prismaService: PrismaService) {}
@@ -24,7 +24,8 @@ export class GetSpecificSubscriptionProvider {
   }
 
   private postValidation<T>(jobSubscription: T): T {
-    if (!jobSubscription) throw new Error('Job subscription not found');
+    if (!jobSubscription)
+      throw JobBusinessExceptions.jobSubscriptionNotFoundException();
 
     return jobSubscription;
   }

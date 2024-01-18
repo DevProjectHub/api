@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { ICreateUser } from '../interface/create-user.interface';
 import { User } from '@prisma/client';
+import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 
 @Injectable()
 export class CreateUserProvider {
@@ -26,6 +27,6 @@ export class CreateUserProvider {
       select: { id: true },
     });
 
-    if (user) throw new Error('User already exists');
+    if (user) throw AuthBusinessExceptions.emailAlreadyRegisteredException();
   }
 }

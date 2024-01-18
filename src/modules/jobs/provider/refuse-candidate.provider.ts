@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { JobBusinessExceptions } from 'src/shared/exceptions/job.exceptions';
 
 @Injectable()
 export class RefuseCandidateProvider {
@@ -17,7 +18,8 @@ export class RefuseCandidateProvider {
       select: { id: true },
     });
 
-    if (!jobSubscription) throw new Error('Job subscription not found');
+    if (!jobSubscription)
+      throw JobBusinessExceptions.jobSubscriptionNotFoundException();
   }
 
   private async refuseCandidate(jobSubscriptionId: string): Promise<void> {

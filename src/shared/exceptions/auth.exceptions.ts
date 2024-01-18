@@ -9,6 +9,7 @@ export class AuthBusinessExceptions {
   static userNotFoundException() {
     return new NotFoundException('Usuario não encontrado');
   }
+
   static emailNotFoundException() {
     return new NotFoundException('O e-mail informado não foi cadastrado.');
   }
@@ -29,7 +30,15 @@ export class AuthBusinessExceptions {
     return new ForbiddenException('Usuário já confirmado.');
   }
 
+  static profileNotFoundException() {
+    return new NotFoundException('Perfil não encontrado.');
+  }
+
   static invalidTokenException() {
     return new UnauthorizedException('Token inválido.');
+  }
+
+  static expiredTokenException() {
+    return new UnauthorizedException('Token expirado.');
   }
 }

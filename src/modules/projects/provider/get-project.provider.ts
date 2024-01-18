@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { IGetProject } from '../interface/get-project.interface';
+import { ProjectBusinessExceptions } from 'src/shared/exceptions/project.exception';
 
 @Injectable()
 export class GetProjectProvider {
@@ -24,7 +25,7 @@ export class GetProjectProvider {
   }
 
   private postValidation<T>(project: T): T {
-    if (!project) throw new Error('Projeto não encontrado');
+    if (!project) throw ProjectBusinessExceptions.projectNotFoundException();
 
     return project;
   }

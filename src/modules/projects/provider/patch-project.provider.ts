@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { IPatchProject } from '../interface/update-project.interface';
 import { Project } from '@prisma/client';
+import { ProjectBusinessExceptions } from 'src/shared/exceptions/project.exception';
 
 @Injectable()
 export class PatchProjectProvider {
@@ -19,7 +20,7 @@ export class PatchProjectProvider {
       select: { id: true },
     });
 
-    if (!project) throw new Error('Project not found');
+    if (!project) throw ProjectBusinessExceptions.projectNotFoundException();
   }
 
   private async patchProject(

@@ -18,7 +18,7 @@ export class SignupProvider {
   async perform(data: ISignup) {
     const signup = await this.signup(data);
 
-    return this.sign(signup);
+    return await this.sign(signup);
   }
 
   async signup(data: ISignup) {
@@ -41,13 +41,13 @@ export class SignupProvider {
     });
   }
 
-  sign(data: JwtAuthPayload) {
+  async sign(data: JwtAuthPayload) {
     const payload: JwtAuthPayload = {
       userId: data.userId,
       profileId: data.profileId,
       isEmailConfirmed: data.isEmailConfirmed,
     };
 
-    return this.jwtStrategies.auth.sign(payload);
+    return await this.jwtStrategies.auth.sign(payload);
   }
 }

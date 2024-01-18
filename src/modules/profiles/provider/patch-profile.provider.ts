@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { IPatchProfile } from '../interface/patch-profile.interface';
+import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 
 @Injectable()
 export class PatchProfileProvider {
@@ -18,7 +19,8 @@ export class PatchProfileProvider {
       select: { profile: { select: { id: true } } },
     });
 
-    if (!user?.profile?.id) throw new Error('Profile not found');
+    if (!user?.profile?.id)
+      throw AuthBusinessExceptions.userNotFoundException();
   }
 
   private async patchProfile(

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { INewJobVacancy } from '../interface/new-vacancy.interface';
+import { ProjectBusinessExceptions } from 'src/shared/exceptions/project.exception';
 
 @Injectable()
 export class NewJobVacancyProvider {
@@ -18,7 +19,7 @@ export class NewJobVacancyProvider {
       select: { id: true },
     });
 
-    if (!project) throw new Error('Project not found');
+    if (!project) throw ProjectBusinessExceptions.projectNotFoundException();
   }
 
   private async newJobVacancy(data: INewJobVacancy): Promise<void> {

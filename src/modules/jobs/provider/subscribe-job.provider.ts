@@ -1,6 +1,7 @@
 import { PrismaService } from 'prisma/prisma.service';
 import { ISubscribeJob } from '../interface/subscribe-job.interface';
 import { Injectable } from '@nestjs/common';
+import { JobBusinessExceptions } from 'src/shared/exceptions/job.exceptions';
 
 @Injectable()
 export class SubscribeJobProvider {
@@ -25,14 +26,15 @@ export class SubscribeJobProvider {
       select: { id: true },
     });
 
-    if (!jobVacancy) throw new Error('Job vacancy not found');
+    if (!jobVacancy) throw JobBusinessExceptions.jobNotFoundException();
 
     const jobSubscription = await this.prismaService.jobSubscription.findFirst({
       where: { jobVacancyId, profileId },
       select: { id: true },
     });
 
-    if (jobSubscription) throw new Error('You already subscribed to this job');
+    if (jobSubscription)
+      throw JobBusinessExceptions.jobSubscriptionNotFoundException();
   }
 
   private async subscribe(

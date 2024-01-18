@@ -9,6 +9,8 @@ import { UserModule } from '../users/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { LoginProvider } from './provider/login.provider';
 import { SignupProvider } from './provider/signup.provider';
+import { ForgetPasswordProvider } from './provider/forget-password.provider';
+import { RecoverPasswordProvider } from './provider/recover-password.provider';
 
 @Module({
   imports: [PrismaModule, JwtModule, UserModule, ProfileModule],
@@ -16,6 +18,8 @@ import { SignupProvider } from './provider/signup.provider';
   providers: [
     LoginProvider,
     SignupProvider,
+    ForgetPasswordProvider,
+    RecoverPasswordProvider,
     JwtStrategies,
     { provide: APP_GUARD, useClass: AuthGuard },
   ],

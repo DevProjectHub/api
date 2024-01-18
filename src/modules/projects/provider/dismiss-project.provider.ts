@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { ProjectBusinessExceptions } from 'src/shared/exceptions/project.exception';
 
 @Injectable()
 export class DismissProjectProvider {
@@ -20,7 +21,8 @@ export class DismissProjectProvider {
       select: { id: true },
     });
 
-    if (!projectProfile) throw new Error('Você não faz parte desse projeto');
+    if (!projectProfile)
+      throw ProjectBusinessExceptions.notPartOfProjectException();
 
     return projectProfile.id;
   }

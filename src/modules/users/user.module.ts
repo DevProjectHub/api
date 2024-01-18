@@ -5,6 +5,7 @@ import { CreateUserProvider } from './provider/create-user.provider';
 import { GetUserByEmailProvider } from './provider/get-user-by-email.provider';
 import { GetUserProvider } from './provider/get-user.provider';
 import { PatchUserProvider } from './provider/patch-user.provider';
+import { GetResetPasswordKeyProvider } from './provider/get-reset-password-key.provider';
 
 @Module({
   imports: [PrismaModule],
@@ -14,7 +15,12 @@ import { PatchUserProvider } from './provider/patch-user.provider';
     GetUserByEmailProvider,
     GetUserProvider,
     PatchUserProvider,
+    GetResetPasswordKeyProvider,
   ],
-  exports: [GetUserByEmailProvider, CreateUserProvider],
+  exports: [
+    GetUserByEmailProvider,
+    CreateUserProvider,
+    GetResetPasswordKeyProvider,
+  ],
 })
 export class UserModule {}

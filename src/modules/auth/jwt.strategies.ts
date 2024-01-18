@@ -5,6 +5,7 @@ import { JwtSignature } from './interface/jwt-signature.interface';
 import { JwtStrategiesImplementation } from './interface/jwt-strategies.interface';
 import { JwtMailPayload } from './interface/jwt-mail-payload.interface';
 import { JwtAuthPayload } from './interface/jwt-auth-payload.interface';
+import { JwtForgetPasswordPayload } from './interface/jwt-forget-password-payload.interface';
 
 @Injectable()
 export class JwtStrategies implements JwtStrategiesImplementation.Interface {
@@ -13,6 +14,8 @@ export class JwtStrategies implements JwtStrategiesImplementation.Interface {
   public auth = this.configureAuthStrategy();
 
   public mail = this.configureMailStrategy();
+
+  public forgetPassword = this.configureForgetPasswordStrategy()
 
   private configureAuthStrategy() {
     return this.configureJwtStrategies<JwtAuthPayload>({
@@ -27,6 +30,15 @@ export class JwtStrategies implements JwtStrategiesImplementation.Interface {
       expiresIn: process.env.EMAIL_CONFIRMATION_EXPIRES_IN!,
     });
   }
+
+  private configureForgetPasswordStrategy() {
+    return this.configureJwtStrategies<JwtForgetPasswordPayload>({
+      secret: process.env.FORGET_PASSWORD_SECRET_KEY!,
+      expiresIn: process.env.FORGET_PASSWORD_EXPIRES_IN!,
+    });
+  }
+
+  
 
   private configureJwtStrategies<
     TPayload extends JwtStrategiesImplementation.Payload,

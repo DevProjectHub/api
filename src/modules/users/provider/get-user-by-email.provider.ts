@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { IGetUserByEmail } from '../interface/get-user-by-email.interface';
+import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 
 @Injectable()
 export class GetUserByEmailProvider {
@@ -20,7 +21,7 @@ export class GetUserByEmailProvider {
   }
 
   private postValidation<T>(user: T): T {
-    if (!user) throw new Error('User not found');
+    if (!user) throw AuthBusinessExceptions.userNotFoundException();
 
     return user;
   }

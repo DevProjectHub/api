@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IPatchUser } from '../interface/patch-user.interface';
 import { PrismaService } from 'prisma/prisma.service';
+import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 
 @Injectable()
 export class PatchUserProvider {
@@ -15,7 +16,7 @@ export class PatchUserProvider {
   private async validation(id: string) {
     const user = await this.prismaService.user.findFirst({ where: { id } });
 
-    if (user) throw new Error('User Already registered');
+    if (!user) throw AuthBusinessExceptions.userNotFoundException();
   }
 
   private async patchUser(id: string, data: IPatchUser) {
