@@ -7,12 +7,12 @@ export class GetSubscriptionsProvider {
   constructor(private prismaService: PrismaService) {}
 
   async perform(projectId: string): Promise<IGetSubscriptionsPerformResult[]> {
-    await this.preValidation(projectId);
+    await this.validation(projectId);
 
     return await this.subscriptions(projectId);
   }
 
-  private async preValidation(projectId: string): Promise<void> {
+  private async validation(projectId: string): Promise<void> {
     const project = await this.prismaService.project.findFirst({
       where: { id: projectId },
       select: { id: true },

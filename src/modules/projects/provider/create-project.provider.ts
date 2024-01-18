@@ -8,7 +8,7 @@ export class CreateProjectProvider {
   constructor(private prismaService: PrismaService) {}
 
   async perform(data: ICreateProject, ownerId: string): Promise<Project> {
-    await this.preValidation(data.name);
+    await this.validation(data.name);
 
     return await this.createProject(data, ownerId);
   }
@@ -34,7 +34,7 @@ export class CreateProjectProvider {
     });
   }
 
-  private async preValidation(name: string): Promise<void> {
+  private async validation(name: string): Promise<void> {
     const project = await this.prismaService.project.findFirst({
       where: { name },
     });

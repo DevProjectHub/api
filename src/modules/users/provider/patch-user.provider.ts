@@ -7,12 +7,12 @@ export class PatchUserProvider {
   constructor(private prismaService: PrismaService) {}
 
   async perform(id: string, data: IPatchUser) {
-    await this.preValidation(id);
+    await this.validation(id);
 
     await this.patchUser(id, data);
   }
 
-  private async preValidation(id: string) {
+  private async validation(id: string) {
     const user = await this.prismaService.user.findFirst({ where: { id } });
 
     if (user) throw new Error('User Already registered');

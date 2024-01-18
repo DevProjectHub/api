@@ -6,6 +6,8 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { ISignup } from '../interface/signup.interface';
+import { Transform } from 'class-transformer';
+import { HashUtil } from 'src/utils/hash.util';
 
 class User {
   @IsNotEmpty()
@@ -14,6 +16,7 @@ class User {
 
   @IsNotEmpty()
   @IsString()
+  @Transform(({ value }) => HashUtil.hash(value))
   password: string;
 }
 

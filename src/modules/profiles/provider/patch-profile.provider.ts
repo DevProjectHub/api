@@ -7,12 +7,12 @@ export class PatchProfileProvider {
   constructor(private prismaService: PrismaService) {}
 
   async perform(userId: string, data: IPatchProfile): Promise<IPatchProfile> {
-    await this.preValidation(userId);
+    await this.validation(userId);
 
     return await this.patchProfile(userId, data);
   }
 
-  private async preValidation(userId: string): Promise<void> {
+  private async validation(userId: string): Promise<void> {
     const user = await this.prismaService.user.findFirst({
       where: { id: userId },
       select: { profile: { select: { id: true } } },

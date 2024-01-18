@@ -11,12 +11,12 @@ export class SubscribeJobProvider {
     profileId: string,
     requirementAnswers: ISubscribeJob[],
   ) {
-    await this.preValidation(jobVacancyId, profileId);
+    await this.validation(jobVacancyId, profileId);
 
     await this.subscribe(jobVacancyId, profileId, requirementAnswers);
   }
 
-  private async preValidation(
+  private async validation(
     jobVacancyId: string,
     profileId: string,
   ): Promise<void> {

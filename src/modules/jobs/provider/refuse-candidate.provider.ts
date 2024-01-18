@@ -6,12 +6,12 @@ export class RefuseCandidateProvider {
   constructor(private prismaService: PrismaService) {}
 
   async perform(jobSubscriptionId: string): Promise<void> {
-    await this.preValidation(jobSubscriptionId);
+    await this.validation(jobSubscriptionId);
 
     await this.refuseCandidate(jobSubscriptionId);
   }
 
-  private async preValidation(jobSubscriptionId: string): Promise<void> {
+  private async validation(jobSubscriptionId: string): Promise<void> {
     const jobSubscription = await this.prismaService.jobSubscription.findFirst({
       where: { id: jobSubscriptionId },
       select: { id: true },

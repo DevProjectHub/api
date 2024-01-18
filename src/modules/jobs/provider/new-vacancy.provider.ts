@@ -7,12 +7,12 @@ export class NewJobVacancyProvider {
   constructor(private prismaService: PrismaService) {}
 
   async perform(data: INewJobVacancy): Promise<void> {
-    await this.preValidation(data.projectId);
+    await this.validation(data.projectId);
 
     await this.newJobVacancy(data);
   }
 
-  private async preValidation(projectId: string): Promise<void> {
+  private async validation(projectId: string): Promise<void> {
     const project = await this.prismaService.project.findFirst({
       where: { id: projectId },
       select: { id: true },

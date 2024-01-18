@@ -6,12 +6,12 @@ export class DismissProjectProvider {
   constructor(private prismaService: PrismaService) {}
 
   async perform(projectId: string, profileId: string): Promise<void> {
-    const projectProfileId = await this.preValidation(projectId, profileId);
+    const projectProfileId = await this.validation(projectId, profileId);
 
     await this.dismissProject(projectProfileId);
   }
 
-  private async preValidation(
+  private async validation(
     projectId: string,
     profileId: string,
   ): Promise<string> {
