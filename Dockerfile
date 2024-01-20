@@ -4,7 +4,8 @@ WORKDIR /api
 
 COPY --chown=node:node ./package*.json ./
 
-RUN npm i -P
+ENV NODE_ENV production
+RUN npm ci
 
 COPY --chown=node:node . .
 
