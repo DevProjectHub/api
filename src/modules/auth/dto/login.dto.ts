@@ -10,6 +10,6 @@ export class LoginDto implements ILogin {
 
   @IsNotEmpty()
   @IsString()
-  @Transform(({ value }) => HashUtil.hash(value))
+  // @Transform(({ value }) => HashUtil.hash(value))
   password: string;
 }

@@ -23,7 +23,7 @@ import { GetProjectsResumeProvider } from './provider/get-resume-projects.provid
 import { PatchProjectProvider } from './provider/patch-project.provider';
 import { SearchProjectProvider } from './provider/search-project.provider';
 import { DismissProjectProvider } from './provider/dismiss-project.provider';
-import { IPagination } from 'src/shared/interface/pagination.interface';
+import { IGetResumeProjects } from './interface/get-resume-projects.provider';
 
 @Controller('projects')
 export class ProjectsController {
@@ -44,7 +44,7 @@ export class ProjectsController {
 
   @Public()
   @Get('resume')
-  async getProjectsResume() {
+  async getProjectsResume(): Promise<IGetResumeProjects[]> {
     return await this.getProjectsResumeProvider.perform();
   }
 
