@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { IGetResumeProjects } from '../interface/get-resume-projects.provider';
+import { IGetResumeJobs } from 'src/modules/projects/interface/get-resume-projects.provider';
 
 @Injectable()
-export class GetProjectsResumeProvider {
+export class GetJobsResumeProvider {
   constructor(private prismaService: PrismaService) {}
 
-  async perform(): Promise<IGetResumeProjects[]> {
+  async perform(): Promise<IGetResumeJobs[]> {
     return await this.getProjectsResume();
   }
 
-  private async getProjectsResume(): Promise<IGetResumeProjects[]> {
+  private async getProjectsResume(): Promise<IGetResumeJobs[]> {
     return await this.prismaService.jobVacancy.findMany({
       take: 10,
       include: { requirements: true },

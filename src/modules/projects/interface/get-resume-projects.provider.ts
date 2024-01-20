@@ -1,9 +1,9 @@
-export interface IGetResumeProjects {
+export interface IGetResumeJobs {
   id: string;
   description: string;
   role: string;
   projectId: string;
-  requirements: Requirement[]
+  requirements: Requirement[];
 }
 
 interface Requirement {

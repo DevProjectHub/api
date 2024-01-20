@@ -7,6 +7,7 @@ import { NewJobVacancyProvider } from './provider/new-vacancy.provider';
 import { RefuseCandidateProvider } from './provider/refuse-candidate.provider';
 import { PrismaModule } from 'prisma/prisma.module';
 import { SubscribeJobProvider } from './provider/subscribe-job.provider';
+import { GetJobsResumeProvider } from './provider/get-resume-jobs.provider';
 
 @Module({
   imports: [PrismaModule],
@@ -16,8 +17,9 @@ import { SubscribeJobProvider } from './provider/subscribe-job.provider';
     GetSubscriptionsProvider,
     GetSpecificSubscriptionProvider,
     AcceptCandidateProvider,
+    GetJobsResumeProvider,
     RefuseCandidateProvider,
-    SubscribeJobProvider
+    SubscribeJobProvider,
   ],
 })
 export class JobsModule {}

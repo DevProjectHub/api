@@ -8,6 +8,9 @@ import { GetSubscriptionsProvider } from './provider/get-subscriptions.provider'
 import { NewJobVacancyProvider } from './provider/new-vacancy.provider';
 import { RefuseCandidateProvider } from './provider/refuse-candidate.provider';
 import { SubscribeJobProvider } from './provider/subscribe-job.provider';
+import { Public } from 'src/shared/decorators/public.decorator';
+import { GetJobsResumeProvider } from './provider/get-resume-jobs.provider';
+import { IGetResumeJobs } from '../projects/interface/get-resume-projects.provider';
 
 @Controller('jobs')
 export class JobController {
@@ -18,6 +21,7 @@ export class JobController {
     private acceptCandidateProvider: AcceptCandidateProvider,
     private refuseCandidateProvider: RefuseCandidateProvider,
     private subscribeJobProvider: SubscribeJobProvider,
+    private getProjectsResumeProvider: GetJobsResumeProvider,
   ) {}
 
   @Get('projectId/:projectId/subscriptions')
@@ -32,6 +36,12 @@ export class JobController {
     return await this.getSpecificSubscriptionProvider.perform(
       jobSubscriptionId,
     );
+  }
+
+  @Public()
+  @Get('resume')
+  async getProjectsResume(): Promise<IGetResumeJobs[]> {
+    return await this.getProjectsResumeProvider.perform();
   }
 
   @Post('new')

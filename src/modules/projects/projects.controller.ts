@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { SignedRequest } from '../auth/interface/signed-request.interface';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { Public } from 'src/shared/decorators/public.decorator';
 import { PatchProjectDto } from './dto/update-project.dto';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { PaginationPipe } from 'src/shared/pipe/pagination.pipe';
@@ -19,11 +18,9 @@ import { FilterDto } from 'src/shared/dto/filter.dto';
 import { CreateProjectProvider } from './provider/create-project.provider';
 import { GetMyProjectsProvider } from './provider/get-my-projects.provider';
 import { GetProjectProvider } from './provider/get-project.provider';
-import { GetProjectsResumeProvider } from './provider/get-resume-projects.provider';
 import { PatchProjectProvider } from './provider/patch-project.provider';
 import { SearchProjectProvider } from './provider/search-project.provider';
 import { DismissProjectProvider } from './provider/dismiss-project.provider';
-import { IGetResumeProjects } from './interface/get-resume-projects.provider';
 
 @Controller('projects')
 export class ProjectsController {
@@ -31,7 +28,6 @@ export class ProjectsController {
     private createProjectProvider: CreateProjectProvider,
     private getMyProjectsProvider: GetMyProjectsProvider,
     private getProjectProvider: GetProjectProvider,
-    private getProjectsResumeProvider: GetProjectsResumeProvider,
     private searchProjectProvider: SearchProjectProvider,
     private patchProjectProvider: PatchProjectProvider,
     private dismissProjectProvider: DismissProjectProvider,
@@ -40,12 +36,6 @@ export class ProjectsController {
   @Get('projectId/:projectId')
   async getProject(@Param('projectId') projectId: string) {
     return await this.getProjectProvider.perform(projectId);
-  }
-
-  @Public()
-  @Get('resume')
-  async getProjectsResume(): Promise<IGetResumeProjects[]> {
-    return await this.getProjectsResumeProvider.perform();
   }
 
   @Get('my')
