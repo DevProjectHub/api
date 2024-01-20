@@ -1,4 +1,4 @@
-FROM node:18-alpine AS dependencies
+FROM node:18-alpine AS prod-dependencies
 
 WORKDIR /api
 
@@ -19,13 +19,15 @@ FROM node:18-alpine AS build
 
 WORKDIR /api
 
-COPY --chown=node:node --from=dependencies /api/node_modules ./node_modules
+COPY --chown=node:node --from=prod-dependencies /api/node_modules ./node_modules
 
 COPY --chown=node:node tsconfig.json package*.json nest-cli.json ./
 
 COPY --chown=node:node /src ./src
 
 COPY --chown=node:node /prisma ./prisma/
+
+RUN npm install --only=development
 
 ENV NODE_ENV production
 RUN npm run build
