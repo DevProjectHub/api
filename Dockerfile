@@ -1,13 +1,10 @@
 FROM node:18-alpine AS dependencies
 
-RUN corepack enable
-
 WORKDIR /api
 
 COPY --chown=node:node ./package*.json ./
-COPY --chown=node:node ./pnpm-lock.yaml ./
 
-RUN pnpm i -P
+RUN npm i -P
 
 COPY --chown=node:node . .
 
@@ -18,8 +15,6 @@ USER node
 #####################
 
 FROM node:18-alpine AS build
-
-RUN corepack enable
 
 WORKDIR /api
 
@@ -32,7 +27,7 @@ COPY --chown=node:node /src ./src
 COPY --chown=node:node /prisma ./prisma/
 
 ENV NODE_ENV production
-RUN pnpm run build
+RUN npm run build
 
 USER node
 
@@ -50,4 +45,4 @@ COPY --chown=node:node --from=build /api/prisma ./prisma
 
 COPY --chown=node:node --from=build /api/package*.json ./
 
-CMD ["/bin/sh", "-c", "npx prisma migrate deploy;node dist/main.js"]
+CMD ["/bin/sh", "-c", "npx prisma migrate deploy;node dist/src/main.js"]
