@@ -1,15 +1,18 @@
 import {
+  IsDefined,
   IsEmail,
   IsNotEmpty,
+  IsNotEmptyObject,
+  IsObject,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { ISignup } from '../interface/signup.interface';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { HashUtil } from 'src/utils/hash.util';
 
-class User {
+class UserDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
@@ -20,7 +23,7 @@ class User {
   password: string;
 }
 
-class Profile {
+class ProfileDto {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -43,9 +46,17 @@ class Profile {
 }
 
 export class SignupDto implements ISignup {
+  @IsDefined()
+  @IsNotEmptyObject()
+  @IsObject()
   @ValidateNested()
-  user: User;
+  @Type(() => UserDto)
+  user: UserDto;
 
+  @IsDefined()
+  @IsNotEmptyObject()
+  @IsObject()
   @ValidateNested()
-  profile: Profile;
+  @Type(() => ProfileDto)
+  profile: ProfileDto;
 }
