@@ -4,6 +4,7 @@ export interface IGetResumeJobs {
   role: string;
   projectId: string;
   requirements: Requirement[];
+  createdAt: Date;
 }
 
 interface Requirement {

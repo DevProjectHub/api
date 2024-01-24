@@ -30,6 +30,7 @@ model Profile {
   projectProfiles  ProjectProfile[]
   projects         Project[]
   jobSubscriptions JobSubscription[]
+  createdAt        DateTime          @default(now())
 }
 
 model ProjectProfile {
@@ -52,6 +53,7 @@ model JobVacancy {
   projectId        String?
   jobSubscriptions JobSubscription[]
   requirements     Requirement[]
+  createdAt          DateTime            @default(now())
 }
 
 model Requirement {
@@ -69,6 +71,7 @@ model JobSubscription {
   profileId          String?
   jobVacancy         JobVacancy?         @relation(fields: [jobVacancyId], references: [id], onDelete: Cascade)
   jobVacancyId       String?
+  createdAt          DateTime            @default(now())
 }
 
 model RequirementAnswer {
@@ -91,6 +94,7 @@ model Project {
   ownerId      String?
   members      ProjectProfile[]
   jobVacancies JobVacancy[]
+  createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 }
 
