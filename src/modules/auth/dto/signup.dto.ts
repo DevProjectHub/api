@@ -25,10 +25,6 @@ class Profile {
   @IsString()
   name: string;
 
-  @IsNotEmpty()
-  @IsString()
-  lastName: string;
-
   @IsOptional()
   @IsString()
   photo?: string;

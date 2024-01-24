@@ -19,7 +19,6 @@ model User {
 model Profile {
   id               String            @id @default(uuid())
   name             String
-  lastName         String
   photo            String?
   description      String?
   linkedin         String?

@@ -5,7 +5,6 @@ export interface ISignup {
   };
   profile: {
     name: string;
-    lastName: string;
     photo?: string;
     description?: string;
     linkedin?: string;

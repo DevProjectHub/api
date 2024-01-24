@@ -15,7 +15,6 @@ CREATE TABLE "User" (
 CREATE TABLE "Profile" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
     "photo" TEXT,
     "description" TEXT,
     "linkedin" TEXT,

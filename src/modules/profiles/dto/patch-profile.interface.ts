@@ -8,10 +8,6 @@ export class PatchProfileDto implements IPatchProfile {
 
   @IsOptional()
   @IsString()
-  lastName?: string;
-
-  @IsOptional()
-  @IsString()
   photo?: string;
 
   @IsOptional()
