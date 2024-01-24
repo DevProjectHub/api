@@ -16,7 +16,12 @@ export class GetUserProvider {
   private async getUser(id: string): Promise<User> {
     return (await this.prismaService.user.findFirst({
       where: { id },
-      select: { password: false },
+      select: {
+        password: false,
+        id: true,
+        email: true,
+        isEmailConfirmed: true,
+      },
     })) as User;
   }
 

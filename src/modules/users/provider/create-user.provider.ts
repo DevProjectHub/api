@@ -17,7 +17,12 @@ export class CreateUserProvider {
   private async createUser(data: ICreateUser): Promise<User> {
     return (await this.prismaService.user.create({
       data: { ...data, isEmailConfirmed: true }, //email sempre confirmado até implementar sistema de email
-      select: { password: false },
+      select: {
+        password: false,
+        id: true,
+        email: true,
+        isEmailConfirmed: true,
+      },
     })) as User;
   }
 
