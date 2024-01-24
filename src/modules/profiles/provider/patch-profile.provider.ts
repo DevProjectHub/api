@@ -7,20 +7,22 @@ import { AuthBusinessExceptions } from 'src/shared/exceptions/auth.exceptions';
 export class PatchProfileProvider {
   constructor(private prismaService: PrismaService) {}
 
-  async perform(userId: string, data: IPatchProfile): Promise<IPatchProfile> {
-    await this.validation(userId);
+  async perform(
+    profileId: string,
+    data: IPatchProfile,
+  ): Promise<IPatchProfile> {
+    await this.validation(profileId);
 
-    return await this.patchProfile(userId, data);
+    return await this.patchProfile(profileId, data);
   }
 
-  private async validation(userId: string): Promise<void> {
-    const user = await this.prismaService.user.findFirst({
-      where: { id: userId },
-      select: { profile: { select: { id: true } } },
+  private async validation(profileId: string): Promise<void> {
+    const profile = await this.prismaService.profile.findFirst({
+      where: { id: profileId },
+      select: { id: true },
     });
 
-    if (!user?.profile?.id)
-      throw AuthBusinessExceptions.userNotFoundException();
+    if (!profile) throw AuthBusinessExceptions.profileNotFoundException();
   }
 
   private async patchProfile(
