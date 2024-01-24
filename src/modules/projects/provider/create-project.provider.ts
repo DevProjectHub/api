@@ -27,7 +27,7 @@ export class CreateProjectProvider {
         members: {
           create: {
             role: data.ownerRole,
-            profile: { connect: { userId: profileId } },
+            profile: { connect: { id: profileId } },
             description: `Fundador do projeto ${data.name}`,
           },
         },
