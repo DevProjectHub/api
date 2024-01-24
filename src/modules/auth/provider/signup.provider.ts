@@ -5,6 +5,7 @@ import { CreateUserProvider } from 'src/modules/users/provider/create-user.provi
 import { CreateProfileProvider } from 'src/modules/profiles/provider/create-profile.provider';
 import { JwtAuthPayload } from '../interface/jwt-auth-payload.interface';
 import { JwtStrategies } from '../jwt.strategies';
+import { HashUtil } from '../../../utils/hash.util';
 
 @Injectable()
 export class SignupProvider {
@@ -25,7 +26,7 @@ export class SignupProvider {
     return await this.prismaService.$transaction(async () => {
       const user = await this.createUserProvider.perform({
         email: data.user.email,
-        password: data.user.password,
+        password: HashUtil.hash(data.user.password),
       });
 
       const profile = await this.createProfileProvider.perform(
