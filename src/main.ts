@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
 import { NullableTransformInterceptor } from './shared/interceptor/nullable.interceptor';
+import { HttpExceptionFilter } from './shared/interceptor/exception-filter.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -25,6 +26,7 @@ async function bootstrap() {
   );
 
   app.useGlobalInterceptors(new NullableTransformInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(3000);
 }
